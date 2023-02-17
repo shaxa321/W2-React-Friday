@@ -49,7 +49,7 @@ const DailyCalendarMeteo = (props) => {
           {forecast ? (
             forecast.list.map((element) => {
               return (
-                <Col xs={2}>
+                <Col className="customCard me-2 ms-2 mb-2 mt-2" xs={2}>
                   <p>{element.dt_txt}</p>
                   <p>
                     {(parseFloat(element.main.temp) - 273.15)

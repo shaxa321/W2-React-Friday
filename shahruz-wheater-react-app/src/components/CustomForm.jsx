@@ -4,6 +4,7 @@ import { TbAngle, TbWorldLongitude } from "react-icons/tb";
 import { BsFillCloudFog2Fill, BsFillForwardFill } from "react-icons/bs";
 import CityMap from "./Citymap";
 import DailyCalendarMeteo from "./DailyCalendarMeteo";
+import CurrentTime from "./CurrentTime";
 
 const CustomForm = () => {
   const [cityQuery, setCityQuery] = useState("Siena");
@@ -108,40 +109,29 @@ const CustomForm = () => {
       <Container>
         <Row>
           <Col xs={12} className="text-center">
-            <h2>{cityData ? cityData.name : "città non trovata"}</h2>{" "}
+            <div>
+              <h2>{cityData ? cityData.name : "città non trovata"}</h2>
+              <p className="subText">
+                Lat :
+                {cityData
+                  ? parseFloat(cityData.lat).toFixed(2).toString()
+                  : "Lat?"}
+                <TbWorldLongitude />
+                Lon :
+                {cityData
+                  ? parseFloat(cityData.lon).toFixed(2).toString()
+                  : "Lon?"}
+              </p>
+              <CurrentTime />
+            </div>
           </Col>
         </Row>
-        <Row>
-          <Col xs={6}>
-            <Row>
-              <Col xs={6}></Col>
-              <Col xs={2}>
-                <p>
-                  <TbWorldLongitude />
-                  Lat:
-                  {cityData
-                    ? parseFloat(cityData.lat).toFixed(2).toString()
-                    : ""}
-                  Lon:
-                  {cityData
-                    ? parseFloat(cityData.lon).toFixed(2).toString()
-                    : ""}
-                </p>
-              </Col>
-            </Row>
-
-            <p>
-              {wheaterCityData ? wheaterCityData.wind.deg : "niente"} DEG
-              <BsFillCloudFog2Fill></BsFillCloudFog2Fill>
-              {wheaterCityData ? wheaterCityData.wind.speed : "Niente"}
-              <BsFillForwardFill></BsFillForwardFill> KM/H
-            </p>
-          </Col>
-          <Col xs={3}>
-            <h6>
+        <Row className="d-flex flex-row justify-content-center ms-5 me-5 text-center">
+          <Col xs={3} className="customCard ms-2 me-2 pt-2 pb-2">
+            <h3>
               {wheaterCityData ? wheaterCityData.weather[0].main : "niente"}
-            </h6>
-            <p>
+            </h3>
+            <p className="subText">
               {wheaterCityData
                 ? wheaterCityData.weather[0].description
                 : "niente"}
@@ -154,9 +144,19 @@ const CustomForm = () => {
               }
               alt=""
             />
-          </Col>
-          <Col xs={3}>
             <p>
+              {wheaterCityData ? wheaterCityData.wind.deg : "niente"} DEG
+              <BsFillCloudFog2Fill></BsFillCloudFog2Fill>
+              {wheaterCityData ? wheaterCityData.wind.speed : "Niente"}
+              <BsFillForwardFill></BsFillForwardFill> KM/H
+            </p>
+          </Col>
+
+          <Col
+            xs={3}
+            className="d-flex justify-content-center align-items-center customCard ms-2 me-2"
+          >
+            <p className="mainDeg">
               {wheaterCityData
                 ? (parseFloat(wheaterCityData.main.temp) - 273.15)
                     .toFixed(0)
