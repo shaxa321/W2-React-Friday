@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row, Form } from "react-bootstrap";
 
-const DailyCalendarMeteo = (props) => {
+const CalendarByDay = (props) => {
   const handleIcons = (iconId = "10d") => {
     const imageUrl = "http://openweathermap.org/img/wn/" + iconId + "@2x.png";
     return imageUrl;
@@ -43,19 +43,21 @@ const DailyCalendarMeteo = (props) => {
       <Container>
         <Row>
           {forecast ? (
-            forecast.list.map((element) => {
-              return (
-                <Col className="customCard me-2 ms-2 mb-2 mt-2" xs={2}>
-                  <p>{element.dt_txt}</p>
-                  <p>
-                    {(parseFloat(element.main.temp) - 273.15)
-                      .toFixed(0)
-                      .toString()}
-                    °C
-                  </p>
-                  <img src={handleIcons(element.weather[0].icon)} alt="" />
-                </Col>
-              );
+            forecast.list.map((element, index) => {
+              if ((index + 1) % 8 === 0) {
+                return (
+                  <Col className="customCard me-2 ms-2 mb-2 mt-2" xs={2}>
+                    <p>{element.dt_txt}</p>
+                    <p>
+                      {(parseFloat(element.main.temp) - 273.15)
+                        .toFixed(0)
+                        .toString()}
+                      °C
+                    </p>
+                    <img src={handleIcons(element.weather[0].icon)} alt="" />
+                  </Col>
+                );
+              }
             })
           ) : (
             <p>Cavolo</p>
@@ -65,4 +67,4 @@ const DailyCalendarMeteo = (props) => {
     </>
   );
 };
-export default DailyCalendarMeteo;
+export default CalendarByDay;

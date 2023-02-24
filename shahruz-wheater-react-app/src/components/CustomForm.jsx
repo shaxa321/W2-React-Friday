@@ -1,28 +1,44 @@
 import { useEffect, useState } from "react";
-import { Col, Container, Row, Form } from "react-bootstrap";
-import { TbAngle, TbWorldLongitude } from "react-icons/tb";
-import { BsFillCloudFog2Fill, BsFillForwardFill } from "react-icons/bs";
-import CityMap from "./Citymap";
-import DailyCalendarMeteo from "./DailyCalendarMeteo";
+import { Col, Container, Row, Form, Spinner } from "react-bootstrap";
+import { TbWorldLongitude } from "react-icons/tb";
+
 import CurrentTime from "./CurrentTime";
+import CalendarByDay from "./CalendarByDay";
+import CurrentDayWeather from "./CurrentDayWeather";
 
 const CustomForm = () => {
-  const [cityQuery, setCityQuery] = useState("Siena");
-  const [inputCityQuery, setInputCityQuery] = useState("");
-  const [cityData, setCityData] = useState(null);
-  const [wheaterCityData, setWheaterCityData] = useState(null);
+  const [inputCityQuery, setInputCityQuery] = useState(null);
+  const [cityQuery, setCityQuery] = useState("London");
+  const [cityData, setCityData] = useState();
+  /*const [cityData, setCityData] = useState({
+    lat: 41.8933203,
+    lon: 12.4829321,
+  });*/
 
   let limit = 1;
   let myCustomKey = "56886f6bd3518ec41af0aa5784fe3cca";
-  let counter = 0;
+
+  const setColorDeg = (degValue = 0) => {
+    switch (true) {
+      case degValue >= 14:
+        return "hotDeg";
+
+      case degValue <= 0:
+        return "coldDeg";
+
+      default:
+        return "normalDeg";
+    }
+  };
 
   const handleIcons = (iconId = "10d") => {
     console.log("handle Icons", iconId);
-    const imageUrl = "http://openweathermap.org/img/wn/" + iconId + "@2x.png";
+    const imageUrl = "http://openweathermap.org/img/wn/" + iconId + "@4x.png";
     return imageUrl;
   };
 
   const fetchByCity = async () => {
+    console.log("FetchBYCIty");
     try {
       const response = await fetch(
         "http://api.openweathermap.org/geo/1.0/direct?q=" +
@@ -33,34 +49,13 @@ const CustomForm = () => {
           "&appid=" +
           myCustomKey
       );
+
       if (response.ok) {
         const data = await response.json();
         setCityData(data[0]);
         console.log("CITYDATA", cityData);
         console.log("DATA", data[0]);
-      } else {
-        console.log("Error while fethcing");
-      }
-    } catch (error) {
-      console.log("catch error", error);
-    }
-  };
-
-  const fetchByPosition = async () => {
-    try {
-      const response = await fetch(
-        "https://api.openweathermap.org/data/2.5/weather?lat=" +
-          cityData.lat +
-          "&lon=" +
-          cityData.lon +
-          "&appid=" +
-          myCustomKey
-      );
-      if (response.ok) {
-        const data = await response.json();
-
-        console.log("WHEATER DATA ", data);
-        setWheaterCityData(data);
+        console.log("Fetch by city OK");
       } else {
         console.log("Error while fethcing");
       }
@@ -75,99 +70,90 @@ const CustomForm = () => {
 
   useEffect(() => {
     fetchByCity();
-    fetchByPosition();
+
+    console.log("component montaggio");
+  }, []);
+
+  useEffect(() => {
+    console.log("i am component did update");
+    fetchByCity();
   }, [cityQuery]);
 
   return (
     <>
-      <Form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Search by City</Form.Label>
-          <Form.Control
-            value={inputCityQuery}
-            type="input"
-            placeholder="Enter city"
-            onChange={(e) => {
-              setInputCityQuery(e.target.value);
-            }}
-            onKeyDown={(e) => {
-              if (e.code === "Enter") {
-                setInputCityQuery("");
-                setCityQuery(e.target.value);
-              }
-            }}
+      {cityData ? (
+        <Container>
+          <Row>
+            <Col xs={12} className="text-center">
+              <div>
+                <h2>{cityData ? cityData.name : "città non trovata"}</h2>
+                <p className="subText">
+                  Lat :
+                  {cityData
+                    ? parseFloat(cityData.lat).toFixed(2).toString()
+                    : "Lat?"}
+                  <TbWorldLongitude />
+                  Lon :
+                  {cityData
+                    ? parseFloat(cityData.lon).toFixed(2).toString()
+                    : "Lon?"}
+                </p>
+                <CurrentTime />
+                <Row>
+                  <Form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                    }}
+                  >
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                      <Form.Label></Form.Label>
+                      <Form.Control
+                        className="inputChange"
+                        value={inputCityQuery}
+                        type="input"
+                        placeholder="Enter city"
+                        onChange={(e) => {
+                          setInputCityQuery(e.target.value);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.code === "Enter") {
+                            console.log("!!!!!!!!!!!!!!!!!!pressent enter");
+                            setInputCityQuery("");
+                            setCityQuery(e.target.value);
+                          }
+                        }}
+                      />
+                      <Form.Text className="text-muted"></Form.Text>
+                    </Form.Group>
+                  </Form>
+                </Row>
+              </div>
+            </Col>
+          </Row>
+          <CurrentDayWeather
+            setColorDeg={setColorDeg}
+            handleIcons={handleIcons}
+            myCustomKey={myCustomKey}
+            cityData={cityData}
           />
-          <Form.Text className="text-muted">
-            We'll never share your secrets with anyone else.
-          </Form.Text>
-        </Form.Group>
-      </Form>
-      <Container>
-        <Row>
-          <Col xs={12} className="text-center">
-            <div>
-              <h2>{cityData ? cityData.name : "città non trovata"}</h2>
-              <p className="subText">
-                Lat :
-                {cityData
-                  ? parseFloat(cityData.lat).toFixed(2).toString()
-                  : "Lat?"}
-                <TbWorldLongitude />
-                Lon :
-                {cityData
-                  ? parseFloat(cityData.lon).toFixed(2).toString()
-                  : "Lon?"}
-              </p>
-              <CurrentTime />
-            </div>
-          </Col>
-        </Row>
-        <Row className="d-flex flex-row justify-content-center ms-5 me-5 text-center">
-          <Col xs={3} className="customCard ms-2 me-2 pt-2 pb-2">
-            <h3>
-              {wheaterCityData ? wheaterCityData.weather[0].main : "niente"}
-            </h3>
-            <p className="subText">
-              {wheaterCityData
-                ? wheaterCityData.weather[0].description
-                : "niente"}
-            </p>
-            <img
-              src={
-                wheaterCityData
-                  ? handleIcons(wheaterCityData.weather[0].icon)
-                  : "http://placekitten.com/g/200/300"
-              }
-              alt=""
-            />
-            <p>
-              {wheaterCityData ? wheaterCityData.wind.deg : "niente"} DEG
-              <BsFillCloudFog2Fill></BsFillCloudFog2Fill>
-              {wheaterCityData ? wheaterCityData.wind.speed : "Niente"}
-              <BsFillForwardFill></BsFillForwardFill> KM/H
-            </p>
-          </Col>
+        </Container>
+      ) : (
+        <Container>
+          <Row className="justify-content-center">
+            <Col md={4}></Col>
+            <Spinner
+              animation="border"
+              role="status"
+              variant="primary"
+              size="lg"
+            >
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </Row>
+        </Container>
+      )}
 
-          <Col
-            xs={3}
-            className="d-flex justify-content-center align-items-center customCard ms-2 me-2"
-          >
-            <p className="mainDeg">
-              {wheaterCityData
-                ? (parseFloat(wheaterCityData.main.temp) - 273.15)
-                    .toFixed(0)
-                    .toString()
-                : "niente"}
-              °C
-            </p>
-          </Col>
-        </Row>
-      </Container>
-      <DailyCalendarMeteo
+      <CalendarByDay
         lat={cityData ? cityData.lat : "43.318661"}
         lon={cityData ? cityData.lon : "11.362180"}
         myCustomKey={myCustomKey}
