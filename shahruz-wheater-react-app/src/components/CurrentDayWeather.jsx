@@ -41,11 +41,6 @@ const CurrentDayWeather = (props) => {
     <>
       {wheaterCityData ? (
         <>
-          {console.log("i am render current day wheater", wheaterCityData)}
-
-          <Row>
-            <h6>{wheaterCityData ? wheaterCityData.name : "niente"}</h6>
-          </Row>
           <Row className="d-flex flex-row justify-content-around  text-center">
             <Col
               xs={3}

@@ -5,15 +5,13 @@ import { TbWorldLongitude } from "react-icons/tb";
 import CurrentTime from "./CurrentTime";
 import CalendarByDay from "./CalendarByDay";
 import CurrentDayWeather from "./CurrentDayWeather";
+import HeadingCity from "./HeadingCity";
+import HomePage from "./HomePage";
 
 const CustomForm = () => {
   const [inputCityQuery, setInputCityQuery] = useState(null);
   const [cityQuery, setCityQuery] = useState("London");
   const [cityData, setCityData] = useState();
-  /*const [cityData, setCityData] = useState({
-    lat: 41.8933203,
-    lon: 12.4829321,
-  });*/
 
   let limit = 1;
   let myCustomKey = "56886f6bd3518ec41af0aa5784fe3cca";
@@ -30,6 +28,8 @@ const CustomForm = () => {
         return "normalDeg";
     }
   };
+
+  const timeZoneConverter = (num) => {};
 
   const handleIcons = (iconId = "10d") => {
     console.log("handle Icons", iconId);
@@ -83,51 +83,37 @@ const CustomForm = () => {
     <>
       {cityData ? (
         <Container>
-          <Row>
-            <Col xs={12} className="text-center">
-              <div>
-                <h2>{cityData ? cityData.name : "città non trovata"}</h2>
-                <p className="subText">
-                  Lat :
-                  {cityData
-                    ? parseFloat(cityData.lat).toFixed(2).toString()
-                    : "Lat?"}
-                  <TbWorldLongitude />
-                  Lon :
-                  {cityData
-                    ? parseFloat(cityData.lon).toFixed(2).toString()
-                    : "Lon?"}
-                </p>
-                <CurrentTime />
-                <Row>
-                  <Form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                    }}
-                  >
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label></Form.Label>
-                      <Form.Control
-                        className="inputChange"
-                        value={inputCityQuery}
-                        type="input"
-                        placeholder="Enter city"
-                        onChange={(e) => {
-                          setInputCityQuery(e.target.value);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.code === "Enter") {
-                            console.log("!!!!!!!!!!!!!!!!!!pressent enter");
-                            setInputCityQuery("");
-                            setCityQuery(e.target.value);
-                          }
-                        }}
-                      />
-                      <Form.Text className="text-muted"></Form.Text>
-                    </Form.Group>
-                  </Form>
-                </Row>
-              </div>
+          <Row className="text-center">
+            <HeadingCity cityData={cityData} />
+            <Col xs={12}>
+              <Row>
+                <Form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                  }}
+                >
+                  <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label></Form.Label>
+                    <Form.Control
+                      className="inputChange"
+                      value={inputCityQuery}
+                      type="input"
+                      placeholder="Enter city"
+                      onChange={(e) => {
+                        setInputCityQuery(e.target.value);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.code === "Enter") {
+                          console.log("!!!!!!!!!!!!!!!!!!pressent enter");
+                          setInputCityQuery("");
+                          setCityQuery(e.target.value);
+                        }
+                      }}
+                    />
+                    <Form.Text className="text-muted"></Form.Text>
+                  </Form.Group>
+                </Form>
+              </Row>
             </Col>
           </Row>
           <CurrentDayWeather
@@ -158,6 +144,7 @@ const CustomForm = () => {
         lon={cityData ? cityData.lon : "11.362180"}
         myCustomKey={myCustomKey}
       />
+      <HomePage />
     </>
   );
 };
