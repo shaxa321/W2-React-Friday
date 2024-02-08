@@ -147,3 +147,33 @@ body {
     color: white;
   }
 }
+
+@keyframes arrowColor {
+  0% {
+    color: #526479;
+  }
+
+  50% {
+    color: white;
+  }
+  100% {
+    color: #526479;
+  }
+}
+
+.arrow {
+  height: 100px;
+  width: 100px;
+  color: #526479;
+  animation-name: arrowColor;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  :hover {
+    animation-name: arrowColor;
+    animation-duration: 5s;
+    animation-iteration-count: 0;
+  }
+}
+.middleDiv {
+  height: 100vh;
+}

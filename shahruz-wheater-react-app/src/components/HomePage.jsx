@@ -2,8 +2,10 @@ import { Container, Row, Col } from "react-bootstrap";
 import HeadingCity from "./HeadingCity";
 import { useRef, useState } from "react";
 import { useEffect } from "react";
-import astanaImg from "../img/Astana.jpg"; // with import
 import FooterIcons from "./FooterIcons";
+import { BsFillArrowRightCircleFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
 
 const HomePage = () => {
   let myCustomKey = "56886f6bd3518ec41af0aa5784fe3cca";
@@ -74,25 +76,43 @@ const HomePage = () => {
     WheaterSingaporeData
   ) {
     return (
-      <Container>
-        <Row className="d-flex justify-content-center">
-          <Col xs={5}>
-            <FooterIcons WheaterCityData={WheaterRomeData} />
-          </Col>
+      <>
+        <Container>
+          <Row className="d-flex justify-content-start">
+            <Col xs={5}>
+              <FooterIcons WheaterCityData={WheaterRomeData} />
+            </Col>
 
-          <Col xs={5}>
-            <FooterIcons WheaterCityData={WheaterNewYorkData} />
-          </Col>
-          <Col xs={5}>
-            <FooterIcons WheaterCityData={WheaterSingaporeData} />
-          </Col>
-          <Col xs={5}>
-            <FooterIcons WheaterCityData={WheaterAstanaData} />
-          </Col>
-        </Row>
-      </Container>
+            <Col xs={5}>
+              <FooterIcons WheaterCityData={WheaterNewYorkData} />
+            </Col>
+          </Row>
+          <Row className="d-flex justify-content-end">
+            <Col xs={1}>
+              <Link to="/search">
+                <BsFillArrowRightCircleFill className="arrow" />
+              </Link>
+            </Col>
+          </Row>
+          <Row className="d-flex justify-content-start">
+            <Col xs={5}>
+              <FooterIcons WheaterCityData={WheaterSingaporeData} />
+            </Col>
+            <Col xs={5}>
+              <FooterIcons WheaterCityData={WheaterAstanaData} />
+            </Col>
+          </Row>
+        </Container>
+      </>
     );
-  } else return <p>hello world</p>;
+  } else
+    return (
+      <div className="middleDiv d-flex justify-content-center align-items-center">
+        <Spinner className="middleDiv" animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
 };
 
 export default HomePage;

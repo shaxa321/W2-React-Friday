@@ -82,47 +82,54 @@ const CustomForm = () => {
   return (
     <>
       {cityData ? (
-        <Container>
-          <Row className="text-center">
-            <HeadingCity cityData={cityData} />
-            <Col xs={12}>
-              <Row>
-                <Form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                  }}
-                >
-                  <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label></Form.Label>
-                    <Form.Control
-                      className="inputChange"
-                      value={inputCityQuery}
-                      type="input"
-                      placeholder="Enter city"
-                      onChange={(e) => {
-                        setInputCityQuery(e.target.value);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.code === "Enter") {
-                          console.log("!!!!!!!!!!!!!!!!!!pressent enter");
-                          setInputCityQuery("");
-                          setCityQuery(e.target.value);
-                        }
-                      }}
-                    />
-                    <Form.Text className="text-muted"></Form.Text>
-                  </Form.Group>
-                </Form>
-              </Row>
-            </Col>
-          </Row>
-          <CurrentDayWeather
-            setColorDeg={setColorDeg}
-            handleIcons={handleIcons}
+        <>
+          <Container>
+            <Row className="text-center">
+              <HeadingCity cityData={cityData} />
+              <Col xs={12}>
+                <Row>
+                  <Form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                    }}
+                  >
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                      <Form.Label></Form.Label>
+                      <Form.Control
+                        className="inputChange"
+                        value={inputCityQuery}
+                        type="input"
+                        placeholder="Enter city"
+                        onChange={(e) => {
+                          setInputCityQuery(e.target.value);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.code === "Enter") {
+                            console.log("!!!!!!!!!!!!!!!!!!pressent enter");
+                            setInputCityQuery("");
+                            setCityQuery(e.target.value);
+                          }
+                        }}
+                      />
+                      <Form.Text className="text-muted"></Form.Text>
+                    </Form.Group>
+                  </Form>
+                </Row>
+              </Col>
+            </Row>
+            <CurrentDayWeather
+              setColorDeg={setColorDeg}
+              handleIcons={handleIcons}
+              myCustomKey={myCustomKey}
+              cityData={cityData}
+            />
+          </Container>
+          <CalendarByDay
+            lat={cityData.lat}
+            lon={cityData.lon}
             myCustomKey={myCustomKey}
-            cityData={cityData}
           />
-        </Container>
+        </>
       ) : (
         <Container>
           <Row className="justify-content-center">
@@ -138,13 +145,6 @@ const CustomForm = () => {
           </Row>
         </Container>
       )}
-
-      <CalendarByDay
-        lat={cityData ? cityData.lat : "43.318661"}
-        lon={cityData ? cityData.lon : "11.362180"}
-        myCustomKey={myCustomKey}
-      />
-      <HomePage />
     </>
   );
 };

@@ -1,5 +1,8 @@
 import { Row, Col } from "react-bootstrap";
-
+import astanaImg from "../img/Astana.jpg";
+import romeImg from "../img/Roma.webp";
+import newyorkImg from "../img/Newyork.webp";
+import singaporeImg from "../img/Singapore.jpg";
 const FooterIcons = (props) => {
   const handleIcons = (iconId = "10d") => {
     const imageUrl = "http://openweathermap.org/img/wn/" + iconId + "@2x.png";
@@ -15,6 +18,26 @@ const FooterIcons = (props) => {
         break;
       default:
         return "normalDeg";
+    }
+  };
+
+  const setImg = (nameCity) => {
+    switch (nameCity) {
+      case "Nur-Sultan":
+        return (
+          <img
+            className="w-100 h-auto"
+            alt={nameCity + " image"}
+            src={astanaImg}
+          ></img>
+        );
+      case "New York":
+        return <img alt={nameCity + " image"} src={newyorkImg}></img>;
+      case "Rome":
+        return <img alt={nameCity + " image"} src={romeImg}></img>;
+      case "Singapore":
+        return <img alt={nameCity + " image"} src={singaporeImg}></img>;
+      default:
     }
   };
   return (
@@ -34,7 +57,7 @@ const FooterIcons = (props) => {
           alt={" Country " + props.WheaterCityData.sys.country}
         />
       </Col>
-      <Col className="customCard me-2 ms-2 mb-2 mt-2">
+      <Col className="customCard me-2 ms-2 mb-2 mt-2 pb-2">
         <p>{props.WheaterCityData.dt}</p>
         <p
           className={
@@ -58,6 +81,7 @@ const FooterIcons = (props) => {
             alt=""
           />
         }
+        {setImg(props.WheaterCityData.name)}
       </Col>
     </Row>
   );
