@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row, Form } from "react-bootstrap";
-
+//OK
 const CalendarByDay = (props) => {
   const setColorDeg = (degValue = 0) => {
     switch (true) {
